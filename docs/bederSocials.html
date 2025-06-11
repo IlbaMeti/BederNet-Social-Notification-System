@@ -1,0 +1,3308 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BederNet - Rrjeti Social i Universitetit Beder</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #1877f2;
+            --primary-dark: #166fe5;
+            --primary-light: #42a5f5;
+            --secondary-color: #42a5f5;
+            --accent-color: #ff6b6b;
+            --success-color: #4caf50;
+            --warning-color: #ff9800;
+            --error-color: #f44336;
+
+            --text-primary: #1c1e21;
+            --text-secondary: #65676b;
+            --text-muted: #8a8d91;
+            --text-light: #b0b3b8;
+
+            --bg-primary: #ffffff;
+            --bg-secondary: #f0f2f5;
+            --bg-tertiary: #e4e6ea;
+            --bg-hover: #f2f3f5;
+            --bg-card: #ffffff;
+            --bg-dark: #18191a;
+
+            --border-color: #dadde1;
+            --border-light: #e4e6ea;
+            --divider: #ced0d4;
+
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.12);
+            --shadow-xl: 0 8px 16px rgba(0, 0, 0, 0.15);
+            --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.1);
+
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            --radius-full: 50px;
+
+            --navbar-height: 56px;
+            --sidebar-width: 320px;
+        }
+
+        [data-theme="dark"] {
+            --text-primary: #e4e6ea;
+            --text-secondary: #b0b3b8;
+            --text-muted: #8a8d91;
+            --text-light: #65676b;
+            --bg-primary: #242526;
+            --bg-secondary: #18191a;
+            --bg-tertiary: #3a3b3c;
+            --bg-hover: #3a3b3c;
+            --bg-card: #242526;
+            --border-color: #3e4042;
+            --border-light: #3e4042;
+            --divider: #3e4042;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.5;
+            font-size: 14px;
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-muted);
+        }
+
+        .navbar {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-light);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--navbar-height);
+            z-index: 1000;
+            box-shadow: var(--shadow-sm);
+            display: none;
+        }
+
+        .navbar.show {
+            display: block;
+        }
+
+        .nav-container {
+            max-width: 1920px;
+            margin: 0 auto;
+            padding: 0 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex: 1;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo::before {
+            content: "🎓";
+            font-size: 28px;
+        }
+
+        .search-nav {
+            position: relative;
+            max-width: 320px;
+            flex: 1;
+        }
+
+        .search-nav input {
+            width: 100%;
+            padding: 10px 16px 10px 40px;
+            background: var(--bg-secondary);
+            border: none;
+            border-radius: var(--radius-full);
+            font-size: 15px;
+            color: var(--text-primary);
+            transition: all 0.2s ease;
+        }
+
+        .search-nav input:focus {
+            outline: none;
+            background: var(--bg-primary);
+            box-shadow: var(--shadow-md);
+        }
+
+        .search-nav::before {
+            content: "🔍";
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 16px;
+        }
+
+        .nav-center {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-center .nav-btn {
+            width: 112px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            color: var(--text-secondary);
+            border-radius: var(--radius-md);
+            transition: all 0.2s ease;
+            position: relative;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        .nav-center .nav-btn:hover {
+            background: var(--bg-hover);
+        }
+
+        .nav-center .nav-btn.active {
+            color: var(--primary-color);
+        }
+
+        .nav-center .nav-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary-color);
+            border-radius: 3px 3px 0 0;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-full);
+            background: var(--bg-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            position: relative;
+            border: none;
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .nav-icon:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 16px;
+            height: 16px;
+            background: var(--error-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 600;
+            color: white;
+            border: 2px solid var(--bg-card);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--border-light);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: block;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .main-container {
+            min-height: 100vh;
+            transition: padding-top 0.3s ease;
+        }
+
+        .main-container.with-navbar {
+            padding-top: var(--navbar-height);
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .auth-container {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .auth-wrapper {
+            display: flex;
+            max-width: 1200px;
+            width: 100%;
+            gap: 32px;
+            align-items: center;
+        }
+
+        .auth-hero {
+            flex: 1;
+            color: white;
+            padding: 40px;
+        }
+
+        .auth-hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+
+        .auth-hero p {
+            font-size: 18px;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .auth-card {
+            background: var(--bg-card);
+            padding: 32px;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-xl);
+            width: 100%;
+            max-width: 400px;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            transition: all 0.2s ease;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+        }
+
+        .btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-secondary {
+            background: var(--text-secondary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--text-primary);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--bg-hover);
+        }
+
+        .btn-full {
+            width: 100%;
+            margin-bottom: 12px;
+        }
+
+        .demo-info {
+            margin-top: 24px;
+            padding: 16px;
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            border: 1px solid #90caf9;
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            color: #1565c0;
+        }
+
+        .feed-layout {
+            max-width: 90%;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr var(--sidebar-width);
+            gap: 20px;
+            padding: 20px;
+            align-items: start;
+        }
+
+        .sidebar {
+            position: sticky;
+            top: calc(var(--navbar-height) + 20px);
+            max-height: calc(100vh - var(--navbar-height) - 40px);
+            overflow-y: auto;
+        }
+
+        .main-feed {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-card);
+            border: 1px solid var(--border-light);
+            margin-bottom: 16px;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .card-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border-light);
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 16px;
+        }
+
+        .post-composer {
+            margin-bottom: 20px;
+        }
+
+        .composer-header {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .composer-input {
+            width: 100%;
+            min-height: 120px;
+            border: none;
+            outline: none;
+            resize: none;
+            font-size: 16px;
+            font-family: inherit;
+            color: var(--text-primary);
+            background: transparent;
+            padding: 0;
+            line-height: 1.5;
+        }
+
+        .composer-input::placeholder {
+            color: var(--text-muted);
+            font-size: 20px;
+        }
+
+        .composer-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .composer-tools {
+            display: flex;
+            gap: 8px;
+        }
+
+        .tool-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: var(--radius-md);
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .tool-btn:hover {
+            background: var(--bg-hover);
+        }
+
+        .image-preview {
+            margin: 16px 0;
+            position: relative;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+        }
+
+        .preview-image {
+            width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+        }
+
+        .remove-image {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .post {
+            margin-bottom: 20px;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .post-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+            display: block;
+        }
+
+        .post-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .avatar-placeholder {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .avatar-placeholder:hover {
+            transform: scale(1.05);
+        }
+
+        .avatar-placeholder.small {
+            width: 32px;
+            height: 32px;
+            font-size: 12px;
+        }
+
+        .avatar-placeholder.large {
+            width: 80px;
+            height: 80px;
+            font-size: 24px;
+        }
+
+        .avatar-placeholder.xlarge {
+            width: 140px;
+            height: 140px;
+            font-size: 40px;
+        }
+
+        .post-info {
+            flex: 1;
+        }
+
+        .post-author {
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .post-author:hover {
+            text-decoration: underline;
+        }
+
+        .post-time {
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        .post-content {
+            margin-bottom: 16px;
+            line-height: 1.5;
+            font-size: 15px;
+            color: var(--text-primary);
+        }
+
+        .post-image {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+            border-radius: var(--radius-md);
+            margin-bottom: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .post-image:hover {
+            transform: scale(1.01);
+        }
+
+        .post-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-light);
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .post-actions {
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0;
+        }
+
+        .action-btn {
+            flex: 1;
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            border-radius: var(--radius-md);
+            transition: all 0.2s ease;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .action-btn:hover {
+            background: var(--bg-hover);
+        }
+
+        .action-btn.liked {
+            color: var(--error-color);
+        }
+
+        .action-btn.liked:hover {
+            background: rgba(244, 67, 54, 0.1);
+        }
+
+        .comments-section {
+            border-top: 1px solid var(--border-light);
+            padding-top: 12px;
+            margin-top: 12px;
+        }
+
+        .comment {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .comment-bubble {
+            flex: 1;
+            background: var(--bg-secondary);
+            padding: 8px 12px;
+            border-radius: 18px;
+            border-top-left-radius: 4px;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+
+        .comment-author:hover {
+            text-decoration: underline;
+        }
+
+        .comment-text {
+            font-size: 14px;
+            color: var(--text-primary);
+            margin-top: 2px;
+        }
+
+        .comment-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .comment-input {
+            flex: 1;
+            background: var(--bg-secondary);
+            border: none;
+            padding: 8px 16px;
+            border-radius: var(--radius-full);
+            font-size: 14px;
+            outline: none;
+            color: var(--text-primary);
+        }
+
+        .comment-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: var(--radius-md);
+            transition: background 0.2s ease;
+            cursor: pointer;
+        }
+
+        .user-card:hover {
+            background: var(--bg-hover);
+        }
+
+        .user-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .user-bio {
+            font-size: 12px;
+            color: var(--text-secondary);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .follow-btn {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .follow-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .follow-btn.following {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .profile-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .profile-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+            border-radius: var(--radius-xl);
+            padding: 40px;
+            text-align: center;
+            color: white;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        }
+
+        .profile-avatar-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .profile-name {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .profile-bio {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .profile-stats {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .stat {
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .stat:hover {
+            transform: scale(1.05);
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .profile-actions {
+            position: relative;
+        }
+
+        .notification-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 16px;
+            border-radius: var(--radius-md);
+            margin-bottom: 8px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .notification-item:hover {
+            background: var(--bg-hover);
+            border-color: var(--border-light);
+        }
+
+        .notification-item.unread {
+            background: linear-gradient(135deg, rgba(24, 119, 242, 0.05), rgba(24, 119, 242, 0.02));
+            border-color: rgba(24, 119, 242, 0.1);
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        .notification-icon.like {
+            background: linear-gradient(135deg, #ff6b6b, #ff5252);
+            color: white;
+        }
+
+        .notification-icon.comment {
+            background: linear-gradient(135deg, #4ecdc4, #26a69a);
+            color: white;
+        }
+
+        .notification-icon.follow {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .notification-icon.share {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+        }
+
+        .notification-icon.message {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            color: white;
+        }
+
+        .notification-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .notification-text {
+            font-size: 15px;
+            line-height: 1.4;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .notification-time {
+            font-size: 13px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .notification-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            flex-shrink: 0;
+        }
+
+        .notifications-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 0 4px;
+        }
+
+        .mark-all-read {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: var(--radius-md);
+            transition: all 0.2s ease;
+        }
+
+        .mark-all-read:hover {
+            background: rgba(24, 119, 242, 0.1);
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal.active {
+            display: flex;
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            padding: 24px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .close-btn {
+            background: var(--bg-secondary);
+            border: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            font-size: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .close-btn:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .toast {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: var(--bg-card);
+            color: var(--text-primary);
+            padding: 16px 20px;
+            border-radius: var(--radius-md);
+            z-index: 3000;
+            transform: translateX(120%);
+            transition: transform 0.3s ease;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border-light);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 300px;
+            max-width: 400px;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            border-left: 4px solid var(--success-color);
+        }
+
+        .toast.error {
+            border-left: 4px solid var(--error-color);
+        }
+
+        .toast.info {
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .empty-state-text {
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .text-center { text-align: center; }
+        .font-bold { font-weight: 600; }
+        .text-sm { font-size: 13px; }
+        .text-muted { color: var(--text-muted); }
+        .flex { display: flex; }
+        .items-center { align-items: center; }
+        .justify-center { justify-content: center; }
+        .gap-2 { gap: 8px; }
+        .gap-3 { gap: 12px; }
+        .gap-4 { gap: 16px; }
+        .mb-2 { margin-bottom: 8px; }
+        .mb-3 { margin-bottom: 12px; }
+        .mb-4 { margin-bottom: 16px; }
+        .p-3 { padding: 12px; }
+        .w-full { width: 100%; }
+
+        .search-results {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--bg-card);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            max-height: 300px;
+            overflow-y: auto;
+            z-index: 1001;
+            margin-top: 4px;
+        }
+
+        .search-result {
+            padding: 12px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid var(--border-light);
+            transition: background 0.2s ease;
+        }
+
+        .search-result:hover {
+            background: var(--bg-hover);
+        }
+
+        .search-result:last-child {
+            border-bottom: none;
+        }
+
+        .theme-toggle {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: var(--bg-secondary);
+            border-radius: 15px;
+            border: 1px solid var(--border-light);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            padding: 0 3px;
+        }
+
+        .theme-toggle::before {
+            content: '🌞';
+            position: absolute;
+            left: 6px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle::after {
+            content: '🌙';
+            position: absolute;
+            right: 6px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle-slider {
+            width: 24px;
+            height: 24px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            transform: translateX(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        [data-theme="dark"] .theme-toggle-slider {
+            transform: translateX(30px);
+        }
+
+        [data-theme="dark"] .theme-toggle {
+            background: var(--bg-tertiary);
+        }
+
+        .profile-avatar-clickable {
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .profile-avatar-clickable:hover {
+            transform: scale(1.05);
+            filter: brightness(0.8);
+        }
+
+        .profile-avatar-clickable:hover::after {
+            content: "📷 Kliko për të ndryshuar";
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            z-index: 10;
+        }
+
+        @media (max-width: 1200px) {
+            .feed-layout {
+                grid-template-columns: 1fr;
+                max-width: 600px;
+                padding: 20px 16px;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .auth-wrapper {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .auth-hero {
+                padding: 20px;
+            }
+            
+            .auth-hero h1 {
+                font-size: 32px;
+            }
+            
+            .nav-container {
+                padding: 0 12px;
+            }
+            
+            .nav-center {
+                display: none;
+            }
+            
+            .search-nav {
+                display: none;
+            }
+            
+            .feed-layout {
+                padding: 16px 12px;
+            }
+            
+            .profile-container {
+                padding: 16px 12px;
+            }
+            
+            .profile-header {
+                padding: 24px 20px;
+            }
+            
+            .profile-name {
+                font-size: 24px;
+            }
+            
+            .profile-stats {
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <a href="#" class="logo" onclick="showPage('feed')">BederNet</a>
+                <div class="search-nav">
+                    <input type="text" placeholder="Kërko në BederNet..." oninput="searchUsers(this.value)">
+                    <div class="search-results" id="search-results" style="display: none;"></div>
+                </div>
+            </div>
+            
+            <div class="nav-center">
+                <button class="nav-btn active" onclick="showPage('feed')" id="feed-nav">
+                    🏠
+                </button>
+                <button class="nav-btn" onclick="showPage('messages')" id="messages-nav">
+                    💬
+                    <div class="notification-dot" id="messages-badge" style="display: none;">1</div>
+                </button>
+                <button class="nav-btn" onclick="showPage('notifications')" id="notifications-nav">
+                    🔔
+                    <div class="notification-dot" id="notifications-badge" style="display: none;">0</div>
+                </button>
+            </div>
+            
+            <div class="nav-right">
+                <div class="theme-toggle" onclick="toggleTheme()">
+                    <div class="theme-toggle-slider"></div>
+                </div>
+                <button class="nav-icon" onclick="showMyProfile()" id="profile-nav">
+                    <div id="nav-user-avatar"></div>
+                </button>
+                <button class="nav-icon" onclick="logout()">
+                    🚪
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-container" id="main-container">
+        <div class="page active" id="login-page">
+            <div class="auth-container">
+                <div class="auth-wrapper">
+                    <div class="auth-hero">
+                        <h1>Mirë se erdhe në BederNet</h1>
+                        <p>Bashkohu me komunitetin e Universitetit Beder. Lidhu me miqtë, shpërndaj ide dhe qëndro i përditësuar me gjithçka që ndodh në universitet.</p>
+                    </div>
+                    
+                    <div class="auth-card">
+                        <div id="login-form">
+                            <div class="form-group">
+                                <input type="email" class="form-input" id="login-email" placeholder="Email ose numri i telefonit" >
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-input" id="login-password" placeholder="Fjalëkalimi">
+                            </div>
+                            <button class="btn btn-full" onclick="login()">
+                                Hyr në llogari
+                            </button>
+                            <div style="text-align: center; margin: 16px 0; color: var(--text-muted);">ose</div>
+                            <button class="btn btn-outline btn-full" onclick="showRegisterForm()">
+                                Krijo llogari të re
+                            </button>
+                            
+                            <div class="demo-info">
+                                <div class="font-bold mb-2">🎯 Llogari demo:</div>
+                                <div class="text-sm">
+                                    <strong>Email:</strong> metiilba@gmail.com<br>
+                                    <strong>Fjalëkalimi:</strong> 123456
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="register-form" style="display: none;">
+                            <div class="form-group">
+                                <input type="text" class="form-input" id="register-name" placeholder="Emri i plotë">
+                            </div>
+                            <div class="form-group">
+                                <input type="email" class="form-input" id="register-email" placeholder="Email" pattern="^[^@\s]+@[^@\s]+\.[^@\s]+$" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="password" class="form-input" id="register-password" placeholder="Fjalëkalimi">
+                            </div>
+                            <div class="form-group">
+                                <textarea class="form-input form-textarea" id="register-bio" placeholder="Tregoni diçka për veten (opsionale)"></textarea>
+                            </div>
+                            <button class="btn btn-full" onclick="register()">
+                                Regjistrohu
+                            </button>
+                            <button class="btn btn-outline btn-full" onclick="showLoginForm()">
+                                Kam llogari tashmë
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page" id="feed-page">
+            <div class="feed-layout">
+                <div class="sidebar">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="user-card" onclick="showMyProfile()">
+                                <div id="sidebar-user-avatar"></div>
+                                <div class="user-info">
+                                    <div class="user-name" id="sidebar-user-name">Përdoruesi</div>
+                                    <div class="user-bio" id="sidebar-user-bio">Bio e përdoruesit</div>
+                                </div>
+                            </div>
+                            <div style="margin-top: 16px; display: flex; justify-content: space-around; text-align: center;">
+                                <div>
+                                    <div class="font-bold" id="sidebar-posts-count">0</div>
+                                    <div class="text-sm text-muted">Postime</div>
+                                </div>
+                                <div>
+                                    <div class="font-bold" id="sidebar-followers-count">0</div>
+                                    <div class="text-sm text-muted">Ndjekës</div>
+                                </div>
+                                <div>
+                                    <div class="font-bold" id="sidebar-following-count">0</div>
+                                    <div class="text-sm text-muted">Ndjek</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">Veprime të shpejta</div>
+                        <div class="card-body">
+                            <button class="btn w-full mb-4" onclick="showCreatePost()">
+                                <span>✍️</span> Krijo postim
+                            </button>
+                            <button class="btn btn-outline w-full" onclick="showPage('messages')">
+                                <span>💬</span> Mesazhet
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="main-feed">
+                    <div class="card post-composer">
+                        <div class="card-body">
+                            <div class="composer-header">
+                                <div id="composer-user-avatar"></div>
+                                <textarea class="composer-input" id="post-content" placeholder="Çfarë po mendoni, [Name]?"></textarea>
+                            </div>
+                            
+                            <div class="image-preview" id="image-preview" style="display: none;">
+                                <img id="preview-img" class="preview-image">
+                                <button class="remove-image" onclick="removeImage()">×</button>
+                            </div>
+                            
+                            <div class="composer-actions">
+                                <div class="composer-tools">
+                                    <button class="tool-btn" onclick="document.getElementById('post-image').click()">
+                                        <span style="color: #45bd62;">📷</span> Foto
+                                    </button>
+                                    <input type="file" id="post-image" accept="image/*,video/*" style="display: none;">
+                                </div>
+                                <button class="btn" onclick="createPost()" id="post-btn" disabled style="opacity: 0.5;">
+                                    Posto
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="posts-feed"></div>
+                </div>
+
+                <div class="sidebar">
+                    <div class="card">
+                        <div class="card-header">👥 Persona që mund t'ju interesojnë</div>
+                        <div class="card-body" style="padding: 12px;">
+                            <div id="suggestions-container"></div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">🔥 Trending në Beder</div>
+                        <div class="card-body" style="padding: 12px;">
+                            <div style="margin-bottom: 12px;">
+                                <div class="font-bold">#BederTech</div>
+                                <div class="text-sm text-muted">1.2K diskutime</div>
+                            </div>
+                            <div style="margin-bottom: 12px;">
+                                <div class="font-bold">#StudentLife</div>
+                                <div class="text-sm text-muted">856 postime</div>
+                            </div>
+                            <div style="margin-bottom: 12px;">
+                                <div class="font-bold">#BederNews</div>
+                                <div class="text-sm text-muted">432 postime</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page" id="profile-page">
+            <div class="profile-container">
+                <div class="profile-header">
+                    <div class="profile-avatar-container">
+                        <div id="profile-avatar"></div>
+                    </div>
+                    <div class="profile-name" id="profile-name">Përdoruesi</div>
+                    <div class="profile-bio" id="profile-bio">Bio e përdoruesit...</div>
+                    <div class="profile-stats">
+                        <div class="stat">
+                            <div class="stat-number" id="profile-posts-count">0</div>
+                            <div class="stat-label">Postime</div>
+                        </div>
+                        <div class="stat" onclick="showFollowers()">
+                            <div class="stat-number" id="profile-followers-count">0</div>
+                            <div class="stat-label">Ndjekës</div>
+                        </div>
+                        <div class="stat" onclick="showFollowing()">
+                            <div class="stat-number" id="profile-following-count">0</div>
+                            <div class="stat-label">Duke ndjekur</div>
+                        </div>
+                    </div>
+                    <div id="profile-actions" class="profile-actions"></div>
+                </div>
+                <div id="profile-posts"></div>
+            </div>
+        </div>
+
+        <div class="page" id="messages-page">
+            <div class="feed-layout">
+                <div style="grid-column: 1 / -1;">
+                    <div class="card">
+                        <div class="card-header">💬 Mesazhet</div>
+                        <div style="display: grid; grid-template-columns: 300px 1fr; height: 500px;">
+                            <div style="border-right: 1px solid var(--border-light); overflow-y: auto;">
+                                <div id="contacts-container" style="padding: 16px;"></div>
+                            </div>
+                            <div id="chat-content">
+                                <div class="empty-state">
+                                    <div class="empty-state-icon">💬</div>
+                                    <div class="empty-state-text">Zgjidhni një kontakt për të filluar bisedën</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page" id="notifications-page">
+            <div class="feed-layout">
+                <div style="grid-column: 1 / -1; max-width: 600px; margin: 0 auto;">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="notifications-header">
+                                <span>🔔 Noftimet</span>
+                                <button class="mark-all-read" onclick="markAllAsRead()">
+                                    Shëno të gjitha si të lexuara
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body" style="padding: 0;">
+                            <div id="notifications-container"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="edit-profile-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Ndrysho profilin</div>
+                <button class="close-btn" onclick="closeModal('edit-profile-modal')">&times;</button>
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-input" id="edit-name" placeholder="Emri">
+            </div>
+            <div class="form-group">
+                <textarea class="form-input form-textarea" id="edit-bio" placeholder="Bio"></textarea>
+            </div>
+            <button class="btn w-full" onclick="saveProfile()">
+                Ruaj ndryshimet
+            </button>
+        </div>
+    </div>
+
+    <div class="modal" id="followers-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Ndjekësit</div>
+                <button class="close-btn" onclick="closeModal('followers-modal')">&times;</button>
+            </div>
+            <div id="followers-list"></div>
+        </div>
+    </div>
+
+    <div class="modal" id="following-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Duke ndjekur</div>
+                <button class="close-btn" onclick="closeModal('following-modal')">&times;</button>
+            </div>
+            <div id="following-list"></div>
+        </div>
+    </div>
+
+    <div class="modal" id="image-modal">
+        <div class="modal-content" style="max-width: 90vw; max-height: 90vh; padding: 0;">
+            <div class="modal-header" style="padding: 16px;">
+                <div class="modal-title">Foto</div>
+                <button class="close-btn" onclick="closeModal('image-modal')">&times;</button>
+            </div>
+            <div style="text-align: center;">
+                <img id="modal-image" style="max-width: 100%; max-height: 70vh; object-fit: contain;">
+            </div>
+        </div>
+    </div>
+
+    <input type="file" id="profile-picture-input" accept="image/*" style="display: none;">
+
+    <div class="toast" id="toast">
+        <div id="toast-icon"></div>
+        <div id="toast-message"></div>
+    </div>
+
+    <script>
+        class SocialNetworkNotifications {
+            constructor(apiBaseUrl, apiKey = null) {
+                this.apiBaseUrl = apiBaseUrl.replace(/\/$/, '');
+                this.apiKey = apiKey;
+                this.endpoints = {
+                    post: '/notifications/post',
+                    auth: '/notifications/auth',
+                    message: '/notifications/message',
+                    comment: '/notifications/comment',
+                    share: '/notifications/share',
+                    follow: '/notifications/follow',
+                    like: '/notifications/like'
+                };
+            }
+
+            async sendNewPostNotification(postData) {
+                const payload = {
+                    user_name: String(postData.authorName || ''),
+                    user_id: String(postData.authorId || ''),
+                    post_content: String(postData.content || ''),
+                    post_id: String(postData.id || ''),
+                    post_type: String(postData.type || 'text'),
+                    timestamp: new Date().toISOString(),
+                    tags: Array.isArray(postData.tags) ? postData.tags : [],
+                    mentions: Array.isArray(postData.mentions) ? postData.mentions : []
+                };
+                return this._sendNotification('post', payload);
+            }
+
+            async sendAuthNotification(authData) {
+                const payload = {
+                    action: String(authData.action || ''),
+                    user_name: String(authData.userName || ''),
+                    user_id: String(authData.userId || ''),
+                    user_email: String(authData.userEmail || ''),
+                    ip_address: String(authData.ipAddress || 'Unknown'),
+                    user_agent: String((navigator.userAgent || 'Unknown').substring(0, 200)), 
+                    timestamp: new Date().toISOString(),
+                    session_id: String(authData.sessionId || 'session_' + Date.now())
+                };
+                return this._sendNotification('auth', payload);
+            }
+
+            async sendCommentNotification(commentData) {
+                const payload = {
+                    commenter_name: String(commentData.commenterName || ''),
+                    commenter_id: String(commentData.commenterId || ''),
+                    post_author_name: String(commentData.postAuthorName || ''),
+                    post_author_id: String(commentData.postAuthorId || ''),
+                    comment_content: String(commentData.content || ''),
+                    comment_id: String(commentData.id || ''),
+                    post_id: String(commentData.postId || ''),
+                    post_title: String(commentData.postTitle || ''),
+                    parent_comment_id: commentData.parentCommentId ? String(commentData.parentCommentId) : null,
+                    timestamp: new Date().toISOString()
+                };
+                return this._sendNotification('comment', payload);
+            }
+
+            async sendLikeNotification(likeData) {
+                console.log('🔍 Preparing like notification with data:', likeData);
+          
+                const payload = {
+                    sender_name: String(likeData.likerName || ''),        
+                    sender_id: String(likeData.likerId || ''),            
+                    recipient_name: String(likeData.postAuthorName || ''),
+                    recipient_id: String(likeData.postAuthorId || ''),    
+                    post_id: String(likeData.postId || ''),
+                    post_content: String(likeData.postContent || '').substring(0, 100),
+                    action: String(likeData.action || 'like'),
+                    timestamp: new Date().toISOString(),
+                    notification_type: 'like'
+                };
+
+                console.log('📤 Fixed payload to be sent:', JSON.stringify(payload, null, 2));
+                return this._sendNotification('like', payload);
+            }
+
+            async sendMessageNotification(messageData) {
+                const payload = {
+                    sender_name: String(messageData.senderName || ''),
+                    sender_id: String(messageData.senderId || ''),
+                    recipient_name: String(messageData.recipientName || ''),
+                    recipient_id: String(messageData.recipientId || ''),
+                    message_content: String(messageData.content || ''),
+                    message_id: String(messageData.id || ''),
+                    message_type: String(messageData.type || 'text'),
+                    conversation_id: String(messageData.conversationId || ''),
+                    timestamp: new Date().toISOString()
+                };
+                return this._sendNotification('message', payload);
+            }
+
+            async sendShareNotification(shareData) {
+                const payload = {
+                    sharer_name: String(shareData.sharerName || ''),
+                    sharer_id: String(shareData.sharerId || ''),
+                    original_author_name: String(shareData.originalAuthorName || ''),
+                    original_author_id: String(shareData.originalAuthorId || ''),
+                    post_id: String(shareData.postId || ''),
+                    post_content: String(shareData.postContent || ''),
+                    share_id: String(shareData.shareId || ''),
+                    share_type: String(shareData.shareType || 'public'),
+                    share_message: String(shareData.shareMessage || ''),
+                    timestamp: new Date().toISOString()
+                };
+                return this._sendNotification('share', payload);
+            }
+
+            async sendFollowNotification(followData) {
+                const payload = {
+                    follower_name: String(followData.followerName || ''),
+                    follower_id: String(followData.followerId || ''),
+                    followed_name: String(followData.followedName || ''),
+                    followed_id: String(followData.followedId || ''),
+                    action: String(followData.action || ''),
+                    follow_type: String(followData.followType || 'user'),
+                    timestamp: new Date().toISOString()
+                };
+                return this._sendNotification('follow', payload);
+            }
+
+            async _sendNotification(type, payload) {
+                try {
+                    const url = `${this.apiBaseUrl}${this.endpoints[type]}`;
+                    const headers = {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    };
+
+                    if (this.apiKey) {
+                        headers['X-API-Key'] = this.apiKey;
+                    }
+
+                    console.log(`📤 Sending ${type} notification to:`, url);
+                    console.log('📦 Payload being sent:', JSON.stringify(payload, null, 2));
+                    console.log('📋 Request headers:', JSON.stringify(headers, null, 2));
+                    console.log('🌐 Request method: POST');
+                    console.log('📄 Request body size:', JSON.stringify(payload).length, 'characters');
+
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: headers,
+                        body: JSON.stringify(payload)
+                    });
+
+                    console.log(`📥 Response status:`, response.status);
+                    console.log(`📥 Response headers:`, Object.fromEntries([...response.headers]));
+                    
+                    let responseBody;
+                    let rawResponseText = '';
+                    try {
+                        rawResponseText = await response.text();
+                        console.log(`📄 Raw response text (${response.status}):`, rawResponseText);
+                        responseBody = rawResponseText ? JSON.parse(rawResponseText) : {};
+                    } catch (parseError) {
+                        console.error(`❌ Failed to parse response JSON:`, parseError);
+                        responseBody = { 
+                            error: 'Failed to parse JSON response', 
+                            rawText: rawResponseText,
+                            parseError: parseError.message 
+                        };
+                    }
+
+                    if (!response.ok) {
+                        console.error(`❌ API Error Full Details:`, {
+                            status: response.status,
+                            statusText: response.statusText,
+                            responseBody: responseBody,
+                            rawResponseText: rawResponseText,
+                            url: url,
+                            sentPayload: payload,
+                            requestHeaders: headers
+                        });
+                        
+                        let apiErrorMessage = 'Unknown error';
+                        if (responseBody.error) {
+                            apiErrorMessage = responseBody.error;
+                        } else if (responseBody.message) {
+                            apiErrorMessage = responseBody.message;
+                        } else if (responseBody.detail) {
+                            apiErrorMessage = responseBody.detail;
+                        } else if (responseBody.errorMessage) {
+                            apiErrorMessage = responseBody.errorMessage;
+                        } else if (rawResponseText) {
+                            apiErrorMessage = rawResponseText.substring(0, 100) + '...';
+                        }
+                        
+                        console.error(`🔍 Extracted API error message:`, apiErrorMessage);
+                        
+                        if (response.status === 400) {
+                            showToast(`API Validation Error: ${apiErrorMessage}`, 'error');
+                        }
+                        
+                        throw new Error(`HTTP ${response.status}: ${apiErrorMessage}`);
+                    }
+
+                    console.log(`✅ ${type} notification sent successfully:`, responseBody);
+                    showToast(`✅ Notification ${type} dërguar me sukses!`, 'success');
+                    return responseBody;
+
+                } catch (error) {
+                    console.error(`❌ Failed to send ${type} notification:`, {
+                        error: error.message,
+                        stack: error.stack,
+                        payload: payload
+                    });
+                    showToast(`❌ Gabim në dërgimin e notification: ${error.message}`, 'error');
+                    return null;
+                }
+            }
+        }
+
+        const notificationClient = new SocialNetworkNotifications(
+            'https://dvpd8v8t33.execute-api.eu-north-1.amazonaws.com/prod'
+        );
+
+        let currentUser = null;
+        let users = [];
+        let posts = [];
+        let messages = {};
+        let notifications = [];
+        let currentImageBase64 = null;
+        let currentChatUser = null;
+        let currentProfileUser = null;
+        let previousPage = 'feed'; 
+
+        function initApp() {
+            createDemoData();
+            setupEventListeners();
+            loadTheme();
+        }
+
+        function generateAvatar(name, color = '#1877f2') {
+            const initials = name.split(' ').map(n => n[0]).join('').toUpperCase();
+            return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cdefs%3E%3ClinearGradient id='grad' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='${encodeURIComponent(color)}'/%3E%3Cstop offset='100%25' stop-color='${encodeURIComponent(darkenColor(color, 20))}'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='50' cy='50' r='50' fill='url(%23grad)'/%3E%3Ctext x='50' y='58' font-family='Arial' font-size='32' fill='white' text-anchor='middle' font-weight='bold'%3E${initials}%3C/text%3E%3C/svg%3E`;
+        }
+
+        function generatePlaceholderImage(width, height, text, color = '#1877f2') {
+            return `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='${width}' height='${height}' viewBox='0 0 ${width} ${height}'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='${encodeURIComponent(color)}'/%3E%3Cstop offset='100%25' stop-color='${encodeURIComponent(darkenColor(color, 30))}'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100%25' height='100%25' fill='url(%23bg)'/%3E%3Ctext x='50%25' y='50%25' font-family='Arial' font-size='28' fill='white' text-anchor='middle' dy='.3em' font-weight='bold'%3E${encodeURIComponent(text)}%3C/text%3E%3C/svg%3E`;
+        }
+
+        function darkenColor(color, percent) {
+            const num = parseInt(color.replace("#", ""), 16);
+            const amt = Math.round(2.55 * percent);
+            const R = (num >> 16) - amt;
+            const G = (num >> 8 & 0x00FF) - amt;
+            const B = (num & 0x0000FF) - amt;
+            return "#" + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
+                (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
+                (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1);
+        }
+
+        function createDemoData() {
+            users = [
+                {
+                    id: 1,
+                    name: "Ilba Meti",
+                    email: "metiilba@gmail.com",
+                    password: "123456",
+                    bio: "✈️📸 Eksploroj bukurinë e botës dhe e ndaj me ju! Student i Shkencave Kompjuterike në Universitetin Beder.",
+                    avatar: generateAvatar("Ilba Meti", "#8B5CF6"),
+                    followers: [2, 3],
+                    following: [2],
+                    joinDate: new Date('2023-01-15')
+                },
+                {
+                    id: 2,
+                    name: "Xhuljano Agalliu",
+                    email: "agalliuxhuljano@gmail.com",
+                    password: "123456",
+                    bio: "Software Engineer & Tech Enthusiast 💻🚀 Krijoj zgjidhje inovative dhe ndaj njohuritë e teknologjisë.",
+                    avatar: generateAvatar("Xhuljano Agalliu", "#06B6D4"),
+                    followers: [1, 3],
+                    following: [1, 3],
+                    joinDate: new Date('2023-02-20')
+                },
+                {
+                    id: 3,
+                    name: "Denada Canaj",
+                    email: "canajdenada@gmail.com",
+                    password: "123456",
+                    bio: "Artist vizuale dhe kreatore e përmbajtjes 🎨✨ Transformoj emocionet në art dhe histori vizuale.",
+                    avatar: generateAvatar("Denada Canaj", "#EC4899"),
+                    followers: [1, 2],
+                    following: [2],
+                    joinDate: new Date('2023-03-10')
+                },
+                {
+                    id: 4,
+                    name: "Igli Zeneli",
+                    email: "zeneliigli@gmail.com",
+                    password: "123456",
+                    bio: "Muzikant dhe prodhues muzikor 🎵🎸 Krijoj muzikë që prekë zemrat dhe frymëzon.",
+                    avatar: generateAvatar("Igli Zeneli", "#F59E0B"),
+                    followers: [1],
+                    following: [1, 2, 3],
+                    joinDate: new Date('2023-04-05')
+                }
+            ];
+
+            posts = [
+                {
+                    id: 1,
+                    userId: 1,
+                    content: "Mëngjes i mrekullueshëm në Alpet Shqiptare! 🏔️✨ Natyra ka një mënyrë unike për t'ju kujtuar se sa e bukur është jeta. Kush ka qenë ndonjëherë këtu? #AlpetShqiptare #Fotografi #Natyra #BederStudents",
+                    image: "alpetshqiptare.jpg",
+                    timestamp: new Date(Date.now() - 3600000),
+                    likes: [2, 3, 4],
+                    comments: [
+                        { userId: 2, content: "Foto fantastike! Ku është kjo pikërisht? Duhet ta vizitoj dhe unë!", timestamp: new Date(Date.now() - 3000000) },
+                        { userId: 3, content: "Frymëzuese! M'ka dhënë ide për pikturën time të ardhshme 🎨", timestamp: new Date(Date.now() - 2400000) }
+                    ]
+                },
+                {
+                    id: 2,
+                    userId: 2,
+                    content: "Sot po punoj në një projekt të ri me React dhe Node.js! 💻🚀 Teknologjia po përparon aq shpejt sa është e vështirë të mbash hap. Por kjo është ajo që e bën kaq emocionuese! A ka ndonjë nga ju që punon me këto teknologji? #WebDev #React #NodeJS #Teknologji #BederTech",
+                    timestamp: new Date(Date.now() - 7200000),
+                    likes: [1, 3],
+                    comments: [
+                        { userId: 4, content: "Gjithmonë të admiroj për pasionin për teknologji! 💪 ", timestamp: new Date(Date.now() - 6000000) }
+                    ]
+                },
+                {
+                    id: 3,
+                    userId: 3,
+                    content: "Jam duke punuar në një seri të re pikturash që tregojnë bukurinë e kulturës shqiptare 🇦🇱🎨 Çdo ngjyrë ka një histori, çdo penalizim ka një kuptim. Arti është gjuha universale e zemrës. #Art #Kultura #Shqiperia #BederArt",
+                    image: "pikture.jpg",
+                    timestamp: new Date(Date.now() - 14400000),
+                    likes: [1, 2, 4],
+                    comments: [
+                        { userId: 1, content: "Sa bukur!🤩 Ku do ta ekspozosh?", timestamp: new Date(Date.now() - 12000000) },
+                        { userId: 4, content: "Art🎨", timestamp: new Date(Date.now() - 10800000) }
+                    ]
+                }
+            ];
+
+            messages = {
+                "1-2": [
+                    { senderId: 1, content: "Hey Xhuljano! Si po ecen projekti i ri?", timestamp: new Date(Date.now() - 1800000) },
+                    { senderId: 2, content: "Pershendetje Ilba! Po shkon shume mire, faleminderit qe pyet! 😊", timestamp: new Date(Date.now() - 1680000) },
+                    { senderId: 1, content: "Super! Nese ke nevoje per ndihme, me thuaj!", timestamp: new Date(Date.now() - 1560000) }
+                ]
+            };
+
+            notifications = [
+                {
+                    id: 1,
+                    userId: 1,
+                    message: "Xhuljano Agalliu pëlqeu postimin tuaj",
+                    type: "like",
+                    timestamp: new Date(Date.now() - 1200000),
+                    read: false
+                },
+                {
+                    id: 2,
+                    userId: 1,
+                    message: "Denada Canaj komentoi në postimin tuaj",
+                    type: "comment",
+                    timestamp: new Date(Date.now() - 900000),
+                    read: false
+                }
+            ];
+        }
+
+        function setupEventListeners() {
+            document.getElementById('post-image').addEventListener('change', handleImageUpload);
+            document.getElementById('profile-picture-input').addEventListener('change', handleProfilePictureUpload);
+            document.getElementById('post-content').addEventListener('input', updatePostButton);
+
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.search-nav')) {
+                    document.getElementById('search-results').style.display = 'none';
+                }
+            });
+
+            document.getElementById('login-email').addEventListener('keypress', e => e.key === 'Enter' && login());
+            document.getElementById('login-password').addEventListener('keypress', e => e.key === 'Enter' && login());
+
+            const postContent = document.getElementById('post-content');
+            if (postContent) {
+                postContent.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                });
+                
+                postContent.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0 && files[0].type.startsWith('image/')) {
+                        const fakeEvent = { target: { files: [files[0]] } };
+                        handleImageUpload(fakeEvent);
+                    }
+                });
+            }
+        }
+
+        function updatePostButton() {
+            const content = document.getElementById('post-content').value.trim();
+            const btn = document.getElementById('post-btn');
+            
+            if (content || currentImageBase64) {
+                btn.disabled = false;
+                btn.style.opacity = '1';
+            } else {
+                btn.disabled = true;
+                btn.style.opacity = '0.5';
+            }
+        }
+
+        function renderAvatar(user, size = '') {
+            const sizeClass = size ? ` ${size}` : '';
+            if (user.avatar && user.avatar.startsWith('data:image')) {
+                let cssClass = 'post-avatar';
+                if (size === 'small') {
+                    cssClass = 'post-avatar';
+                    return `<img src="${user.avatar}" class="${cssClass}" style="width: 32px; height: 32px;" alt="${user.name}" onclick="showUserProfile(${user.id})">`;
+                } else if (size === 'large') {
+                    cssClass = 'post-avatar';
+                    return `<img src="${user.avatar}" class="${cssClass}" style="width: 80px; height: 80px;" alt="${user.name}" onclick="showUserProfile(${user.id})">`;
+                } else if (size === 'xlarge') {
+                    cssClass = 'post-avatar';
+                    return `<img src="${user.avatar}" class="${cssClass}" style="width: 140px; height: 140px;" alt="${user.name}" onclick="showUserProfile(${user.id})">`;
+                } else {
+                    return `<img src="${user.avatar}" class="${cssClass}" alt="${user.name}" onclick="showUserProfile(${user.id})">`;
+                }
+            } else {
+                const initials = user.name.split(' ').map(n => n[0]).join('').toUpperCase();
+                return `<div class="avatar-placeholder${sizeClass}" onclick="showUserProfile(${user.id})">${initials}</div>`;
+            }
+        }
+
+        function formatTime(timestamp) {
+            const now = new Date();
+            const diff = now - timestamp;
+            const minutes = Math.floor(diff / 60000);
+            const hours = Math.floor(diff / 3600000);
+            const days = Math.floor(diff / 86400000);
+
+            if (minutes < 1) return 'Tani';
+            if (minutes < 60) return `${minutes}min`;
+            if (hours < 24) return `${hours}h`;
+            if (days < 7) return `${days}d`;
+            return timestamp.toLocaleDateString('sq');
+        }
+
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            const toastIcon = document.getElementById('toast-icon');
+            const toastMessage = document.getElementById('toast-message');
+            
+            const icons = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' };
+            
+            toastIcon.textContent = icons[type] || 'ℹ️';
+            toastMessage.textContent = message;
+            toast.className = `toast ${type} show`;
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 4000);
+        }
+
+        function showRegisterForm() {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'block';
+        }
+
+        function showLoginForm() {
+            document.getElementById('login-form').style.display = 'block';
+            document.getElementById('register-form').style.display = 'none';
+        }
+
+        async function register() {
+            const name = document.getElementById('register-name').value.trim();
+            const email = document.getElementById('register-email').value.trim();
+            const password = document.getElementById('register-password').value;
+            const bio = document.getElementById('register-bio').value.trim();
+
+            if (!name || !email || !password) {
+                showToast('Ju lutem plotësoni të gjitha fushat e detyrueshme!', 'error');
+                return;
+            }
+
+            if (!email.includes('@')) {
+                showToast('Email duhet të përmbajë simbolin @', 'error');
+                return;
+            }
+
+            if (users.find(u => u.email === email)) {
+                showToast('Ky email është i regjistruar tashmë!', 'error');
+                return;
+            }
+
+            const newUser = {
+                id: users.length + 1,
+                name,
+                email,
+                password,
+                bio: bio || " ",
+                avatar: generateAvatar(name, "#1877f2"),
+                followers: [],
+                following: [],
+                joinDate: new Date()
+            };
+
+            users.push(newUser);
+
+            await notificationClient.sendAuthNotification({
+                action: 'register',
+                userName: newUser.name,
+                userId: newUser.id,
+                userEmail: newUser.email
+            });
+
+            showToast('Regjistrimi u krye me sukses! 🎉', 'success');
+            showLoginForm();
+            clearForm('register');
+        }
+
+        async function login() {
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+
+            if (!email || !password) {
+                showToast('Ju lutem plotësoni të gjitha fushat!', 'error');
+                return;
+            }
+
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (!user) {
+                showToast('Email ose fjalëkalim i gabuar!', 'error');
+                return;
+            }
+
+            currentUser = user;
+
+            await notificationClient.sendAuthNotification({
+                action: 'login',
+                userName: user.name,
+                userId: user.id,
+                userEmail: user.email,
+                sessionId: 'session_' + Date.now()
+            });
+
+            showToast(`Mirë se erdhe ${user.name}! 🎉`, 'success');
+            
+            document.getElementById('navbar').classList.add('show');
+            document.getElementById('main-container').classList.add('with-navbar');
+            
+            showPage('feed');
+            updateSidebarUserInfo();
+            updateNavAvatar();
+        }
+
+        async function logout() {
+            if (currentUser) {
+                await notificationClient.sendAuthNotification({
+                    action: 'logout',
+                    userName: currentUser.name,
+                    userId: currentUser.id
+                });
+            }
+
+            currentUser = null;
+            currentChatUser = null;
+            currentProfileUser = null;
+            
+            document.getElementById('navbar').classList.remove('show');
+            document.getElementById('main-container').classList.remove('with-navbar');
+            
+            showPage('login');
+            showToast('Ju dolët me sukses! 👋', 'success');
+            clearForm('login');
+        }
+
+        function clearForm(type) {
+            if (type === 'login') {
+                document.getElementById('login-email').value = '';
+                document.getElementById('login-password').value = '';
+            } else if (type === 'register') {
+                document.getElementById('register-name').value = '';
+                document.getElementById('register-email').value = '';
+                document.getElementById('register-password').value = '';
+                document.getElementById('register-bio').value = '';
+            }
+        }
+
+        function showPage(pageId) {
+            if (pageId !== 'profile') {
+                const currentActive = document.querySelector('.page.active');
+                if (currentActive && currentActive.id !== 'profile-page') {
+                    previousPage = currentActive.id.replace('-page', '');
+                }
+            }
+
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId + '-page').classList.add('active');
+            
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            const activeBtn = document.getElementById(pageId + '-nav');
+            if (activeBtn) activeBtn.classList.add('active');
+            
+            switch(pageId) {
+                case 'feed':
+                    loadFeed();
+                    loadSuggestions();
+                    updateSidebarUserInfo();
+                    break;
+                case 'profile':
+                    break;
+                case 'messages':
+                    loadMessages();
+                    break;
+                case 'notifications':
+                    loadNotifications();
+                    break;
+            }
+        }
+
+        function updateNavAvatar() {
+            if (!currentUser) return;
+            const container = document.getElementById('nav-user-avatar');
+            if (currentUser.avatar && currentUser.avatar.startsWith('data:image')) {
+                container.innerHTML = `<img src="${currentUser.avatar}" class="user-avatar" alt="${currentUser.name}" style="width: 32px; height: 32px; border-radius: 50%; object-fit: cover;">`;
+            } else {
+                const initials = currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase();
+                container.innerHTML = `<div class="avatar-placeholder" style="width: 32px; height: 32px; font-size: 12px; border-radius: 50%;">${initials}</div>`;
+            }
+        }
+
+        function showMyProfile() {
+            previousPage = document.querySelector('.page.active').id.replace('-page', '');
+            currentProfileUser = currentUser;
+            loadProfile();
+            showPage('profile');
+        }
+
+        function showUserProfile(userId) {
+            const user = users.find(u => u.id === userId);
+            if (!user) return;
+            document.getElementById('search-results').style.display = 'none';
+
+            previousPage = document.querySelector('.page.active').id.replace('-page', '');
+            currentProfileUser = user;
+            loadProfile();
+            showPage('profile');
+        }
+
+        function updateSidebarUserInfo() {
+            if (!currentUser) return;
+            
+            const sidebarAvatarContainer = document.getElementById('sidebar-user-avatar');
+            if (currentUser.avatar && currentUser.avatar.startsWith('data:image')) {
+                sidebarAvatarContainer.innerHTML = `<img src="${currentUser.avatar}" class="post-avatar" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" alt="${currentUser.name}" onclick="showMyProfile()">`;
+            } else {
+                const initials = currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase();
+                sidebarAvatarContainer.innerHTML = `<div class="avatar-placeholder" onclick="showMyProfile()" style="width: 40px; height: 40px; border-radius: 50%;">${initials}</div>`;
+            }
+            
+            document.getElementById('sidebar-user-name').textContent = currentUser.name;
+            document.getElementById('sidebar-user-bio').textContent = currentUser.bio.substring(0, 60) + '...';
+            
+            const userPosts = posts.filter(p => p.userId === currentUser.id);
+            document.getElementById('sidebar-posts-count').textContent = userPosts.length;
+            document.getElementById('sidebar-followers-count').textContent = currentUser.followers.length;
+            document.getElementById('sidebar-following-count').textContent = currentUser.following.length;
+        }
+
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (file.size > 10 * 1024 * 1024) {
+                showToast('Madhësia e file-it nuk duhet të kalojë 10MB!', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                currentImageBase64 = e.target.result;
+                document.getElementById('preview-img').src = currentImageBase64;
+                document.getElementById('image-preview').style.display = 'block';
+                updatePostButton();
+                showToast('Foto u ngarkua! 📸', 'success');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removeImage() {
+            currentImageBase64 = null;
+            document.getElementById('image-preview').style.display = 'none';
+            document.getElementById('post-image').value = '';
+            updatePostButton();
+            showToast('Foto u hoq! 🗑️', 'info');
+        }
+
+        async function createPost() {
+            const content = document.getElementById('post-content').value.trim();
+            
+            if (!content && !currentImageBase64) {
+                showToast('Shkruani diçka ose zgjidhni një media!', 'error');
+                return;
+            }
+
+            const newPost = {
+                id: posts.length + 1,
+                userId: currentUser.id,
+                content,
+                image: currentImageBase64,
+                timestamp: new Date(),
+                likes: [],
+                comments: []
+            };
+
+            posts.unshift(newPost);
+
+            await notificationClient.sendNewPostNotification({
+                authorName: currentUser.name,
+                authorId: currentUser.id,
+                content: content,
+                id: newPost.id,
+                type: currentImageBase64 ? 'image' : 'text',
+                tags: extractTags(content),
+                mentions: extractMentions(content)
+            });
+
+            document.getElementById('post-content').value = '';
+            document.getElementById('post-content').placeholder = `Çfarë po mendon, ${currentUser.name.split(' ')[0]}?`;
+            removeImage();
+            
+            loadFeed();
+            updateSidebarUserInfo();
+            showToast('Postimi u publikua! 🚀', 'success');
+        }
+
+        function extractTags(content) {
+            const regex = /#(\w+)/g;
+            const tags = [];
+            let match;
+            while ((match = regex.exec(content)) !== null) {
+                tags.push(match[1]);
+            }
+            return tags;
+        }
+
+        function extractMentions(content) {
+            const regex = /@(\w+)/g;
+            const mentions = [];
+            let match;
+            while ((match = regex.exec(content)) !== null) {
+                mentions.push(match[1]);
+            }
+            return mentions;
+        }
+
+        function generatePostHTML(post, context = 'feed') {
+            const user = users.find(u => u.id === post.userId);
+            if (!user) return '';
+
+            const isLiked = post.likes.includes(currentUser.id);
+            const hasLikes = post.likes.length > 0;
+            const hasComments = post.comments.length > 0;
+            
+            return `
+                <div class="card-body">
+                    <div class="post-header">
+                        ${renderAvatar(user)}
+                        <div class="post-info">
+                            <div class="post-author" onclick="showUserProfile(${user.id})">${user.name}</div>
+                            <div class="post-time">${formatTime(post.timestamp)}</div>
+                        </div>
+                    </div>
+                    <div class="post-content">${post.content}</div>
+                    ${post.image ? `<img src="${post.image}" class="post-image" alt="Post image" onclick="showImageModal('${post.image.replace(/'/g, "&apos;")}')" style="width: 100%; max-height: 500px; object-fit: cover; border-radius: var(--radius-md); margin-bottom: 16px; cursor: pointer;">` : ''}
+                    
+                    ${(hasLikes || hasComments) ? `
+                    <div class="post-stats">
+                        <div>${hasLikes ? `${post.likes.length} pëlqime` : ''}</div>
+                        <div>${hasComments ? `${post.comments.length} komente` : ''}</div>
+                    </div>
+                    ` : ''}
+                    
+                    <div class="post-actions">
+                        <button class="action-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike(${post.id})">
+                            <span>${isLiked ? '❤️' : '🤍'}</span> Pëlqej
+                        </button>
+                        <button class="action-btn" onclick="toggleComments(${post.id}, '${context}')">
+                            <span>💬</span> Komento
+                        </button>
+                        <button class="action-btn" onclick="sharePost(${post.id})">
+                            <span>🔄</span> Ndaj
+                        </button>
+                    </div>
+                    
+                    <div class="comments-section" id="${context}-comments-${post.id}" style="display: none;">
+                        <div id="${context}-comments-list-${post.id}">
+                            ${post.comments.map(comment => {
+                                const commentUser = users.find(u => u.id === comment.userId);
+                                return `
+                                    <div class="comment">
+                                        ${renderAvatar(commentUser, 'small')}
+                                        <div class="comment-bubble">
+                                            <div class="comment-author" onclick="showUserProfile(${commentUser.id})">${commentUser.name}</div>
+                                            <div class="comment-text">${comment.content}</div>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                        <div class="comment-input-wrapper">
+                            ${renderAvatar(currentUser, 'small')}
+                            <input type="text" class="comment-input" placeholder="Shkruani një koment..." id="${context}-comment-input-${post.id}" onkeypress="handleCommentKeypress(event, ${post.id}, '${context}')">
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function loadFeed() {
+            const container = document.getElementById('posts-feed');
+            
+            const composerAvatarContainer = document.getElementById('composer-user-avatar');
+            if (currentUser.avatar && currentUser.avatar.startsWith('data:image')) {
+                composerAvatarContainer.innerHTML = `<img src="${currentUser.avatar}" class="post-avatar" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;" alt="${currentUser.name}">`;
+            } else {
+                const initials = currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase();
+                composerAvatarContainer.innerHTML = `<div class="avatar-placeholder" style="width: 40px; height: 40px; border-radius: 50%;">${initials}</div>`;
+            }
+            
+            document.getElementById('post-content').placeholder = `Çfarë po mendoni, ${currentUser.name.split(' ')[0]}?`;
+            
+            container.innerHTML = '';
+
+            if (posts.length === 0) {
+                container.innerHTML = `
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">📝</div>
+                                <div class="empty-state-text">Nuk ka postime akoma. Bëhuni i pari që poston!</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+
+            posts.forEach(post => {
+                const postElement = document.createElement('div');
+                postElement.className = 'card post';
+                postElement.innerHTML = generatePostHTML(post, 'feed');
+                container.appendChild(postElement);
+            });
+        }
+
+        async function toggleLike(postId) {
+            const post = posts.find(p => p.id === postId);
+            if (!post) {
+                console.error('❌ Post not found:', postId);
+                return;
+            }
+
+            const likeIndex = post.likes.indexOf(currentUser.id);
+            
+            if (likeIndex > -1) {
+                post.likes.splice(likeIndex, 1);
+                console.log('👎 Post unliked, API call skipped for unlike');
+            } else {
+                post.likes.push(currentUser.id);
+                
+                if (post.userId !== currentUser.id) {
+                    const postAuthor = users.find(u => u.id === post.userId);
+                    
+                    console.log('📤 Preparing like notification data...');
+                    console.log('Current user:', currentUser.name, 'ID:', currentUser.id);
+                    console.log('Post author:', postAuthor.name, 'ID:', postAuthor.id);
+                    console.log('Post ID:', post.id);
+                    console.log('Post content preview:', post.content.substring(0, 50) + '...');
+                    
+                    try {
+                        const minimalPayload = {
+                            likerName: currentUser.name,
+                            likerId: currentUser.id,
+                            postAuthorName: postAuthor.name,
+                            postAuthorId: postAuthor.id,
+                            postId: post.id
+                        };
+                        
+                        console.log('🧪 Testing with minimal payload:', minimalPayload);
+                        
+                        const result = await notificationClient.sendLikeNotification({
+                            likerName: currentUser.name,
+                            likerId: currentUser.id,
+                            postAuthorName: postAuthor.name,
+                            postAuthorId: postAuthor.id,
+                            postId: post.id,
+                            postContent: post.content.substring(0, 50), 
+                            action: 'like'
+                        });
+                        
+                        if (result) {
+                            console.log('✅ Like notification sent successfully via API');
+                            showToast('Like u regjistrua ne API! ❤️', 'success');
+                        } else {
+                            console.warn('⚠️ API returned null result');
+                            showToast('Like regjistruar (API returned null)', 'warning');
+                        }
+                        
+                    } catch (error) {
+                        console.error('❌ Like notification API failed:', {
+                            error: error.message,
+                            stack: error.stack.substring(0, 200) + '...',
+                            postId: post.id,
+                            userId: currentUser.id
+                        });
+                   
+                        const errorMsg = error.message.includes('400') ? 
+                            'API validation error - check console for details' : 
+                            error.message;
+                        showToast(`API Error: ${errorMsg}`, 'error');
+                    }
+                    addNotification(post.userId, `${currentUser.name} pëlqeu postimin tuaj`, 'like');
+                    console.log('📝 Local like notification added');
+                } else {
+                    console.log('🚫 Skipping notification - user liked own post');
+                }
+            }
+            
+            if (document.getElementById('feed-page').classList.contains('active')) {
+                loadFeed();
+            } else if (document.getElementById('profile-page').classList.contains('active')) {
+                loadProfile();
+            }
+        }
+
+        function toggleComments(postId, context = 'feed') {
+            const commentsSection = document.getElementById(`${context}-comments-${postId}`);
+            if (commentsSection) {
+                const isVisible = commentsSection.style.display !== 'none';
+                commentsSection.style.display = isVisible ? 'none' : 'block';
+
+                if (!isVisible) {
+                    setTimeout(() => {
+                        const commentInput = document.getElementById(`${context}-comment-input-${postId}`);
+                        if (commentInput) {
+                            commentInput.focus();
+                        }
+                    }, 100);
+                }
+            }
+        }
+
+        function handleCommentKeypress(event, postId, context = 'feed') {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                addComment(postId, context);
+            }
+        }
+
+        async function addComment(postId, context = 'feed') {
+            const input = document.getElementById(`${context}-comment-input-${postId}`);
+            if (!input) return;
+            
+            const content = input.value.trim();
+            if (!content) return;
+
+            const post = posts.find(p => p.id === postId);
+            if (!post) return;
+
+            post.comments.push({
+                userId: currentUser.id,
+                content,
+                timestamp: new Date()
+            });
+
+            if (post.userId !== currentUser.id) {
+                const postAuthor = users.find(u => u.id === post.userId);
+                await notificationClient.sendCommentNotification({
+                    commenterName: currentUser.name,
+                    commenterId: currentUser.id,
+                    postAuthorName: postAuthor.name,
+                    postAuthorId: postAuthor.id,
+                    content: content,
+                    id: Date.now(),
+                    postId: post.id,
+                    postTitle: post.content.substring(0, 50) + '...'
+                });
+                
+                addNotification(post.userId, `${currentUser.name} komentoi në postimin tuaj`, 'comment');
+            }
+
+            input.value = '';
+            showToast('Komenti u shtua! 💬', 'success');
+
+            if (document.getElementById('feed-page').classList.contains('active')) {
+                loadFeed();
+            } else if (document.getElementById('profile-page').classList.contains('active')) {
+                loadProfile();
+            }
+        }
+
+        async function sharePost(postId) {
+            const post = posts.find(p => p.id === postId);
+            if (!post) return;
+
+            const originalUser = users.find(u => u.id === post.userId);
+            if (!originalUser) return;
+
+            const sharedPost = {
+                id: posts.length + 1,
+                userId: currentUser.id,
+                content: `🔄 ${currentUser.name} ndau një postim nga ${originalUser.name}:\n\n"${post.content}"`,
+                image: post.image,
+                timestamp: new Date(),
+                likes: [],
+                comments: [],
+                isShared: true
+            };
+
+            posts.unshift(sharedPost);
+
+            if (post.userId !== currentUser.id) {
+                await notificationClient.sendShareNotification({
+                    sharerName: currentUser.name,
+                    sharerId: currentUser.id,
+                    originalAuthorName: originalUser.name,
+                    originalAuthorId: originalUser.id,
+                    postId: post.id,
+                    postContent: post.content,
+                    shareId: sharedPost.id,
+                    shareType: 'public',
+                    shareMessage: ''
+                });
+                
+                addNotification(post.userId, `${currentUser.name} ndau postimin tuaj`, 'share');
+            }
+            
+            showToast('Postimi u nda! 🔄', 'success');
+            loadFeed();
+            updateSidebarUserInfo();
+        }
+
+        function showImageModal(imageSrc) {
+            if (!imageSrc) return;
+            
+            const cleanImageSrc = imageSrc.replace(/&apos;/g, "'");
+            
+            document.getElementById('modal-image').src = cleanImageSrc;
+            document.getElementById('image-modal').classList.add('active');
+            
+            const modal = document.getElementById('image-modal');
+            const onModalClick = (e) => {
+                if (e.target === modal) {
+                    closeModal('image-modal');
+                    modal.removeEventListener('click', onModalClick);
+                }
+            };
+            modal.addEventListener('click', onModalClick);
+        }
+
+        function changeProfilePicture() {
+            document.getElementById('profile-picture-input').click();
+        }
+
+        function loadProfile() {
+            const user = currentProfileUser || currentUser;
+            const isOwnProfile = user.id === currentUser.id;
+
+            const avatarContainer = document.getElementById('profile-avatar');
+            
+            if (isOwnProfile) {
+                avatarContainer.innerHTML = renderAvatar(user, 'xlarge');
+                avatarContainer.className = 'profile-avatar-clickable';
+                avatarContainer.onclick = changeProfilePicture;
+                avatarContainer.title = 'Kliko për të ndryshuar foton e profilit';
+            } else {
+                avatarContainer.innerHTML = renderAvatar(user, 'xlarge');
+                avatarContainer.className = '';
+                avatarContainer.onclick = null;
+                avatarContainer.title = '';
+            }
+            
+            document.getElementById('profile-name').textContent = user.name;
+            document.getElementById('profile-bio').textContent = user.bio;
+            document.getElementById('profile-followers-count').textContent = user.followers.length;
+            document.getElementById('profile-following-count').textContent = user.following.length;
+
+            const userPosts = posts.filter(p => p.userId === user.id);
+            document.getElementById('profile-posts-count').textContent = userPosts.length;
+
+            const actionsContainer = document.getElementById('profile-actions');
+            if (isOwnProfile) {
+                actionsContainer.innerHTML = `
+                    <button class="btn" onclick="editProfile()">
+                        ✏️ Ndrysho profilin
+                    </button>
+                `;
+            } else {
+                const isFollowing = currentUser.following.includes(user.id);
+                actionsContainer.innerHTML = `
+                    <div style="display: flex; gap: 12px; justify-content: center;">
+                        <button class="btn ${isFollowing ? 'btn-secondary' : ''}" onclick="toggleFollow(${user.id})">
+                            ${isFollowing ? '✓ Duke ndjekur' : '+ Ndiq'}
+                        </button>
+                        <button class="btn btn-outline" onclick="startMessage(${user.id})">
+                            💬 Mesazh
+                        </button>
+                    </div>
+                `;
+            }
+
+            const container = document.getElementById('profile-posts');
+            container.innerHTML = '';
+            
+            if (userPosts.length === 0) {
+                container.innerHTML = `
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">📝</div>
+                                <div class="empty-state-text">${isOwnProfile ? 'Nuk keni postime akoma' : `${user.name} nuk ka postime akoma`}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            userPosts.forEach(post => {
+                const postElement = document.createElement('div');
+                postElement.className = 'card post';
+                postElement.innerHTML = generatePostHTML(post, 'profile');
+                container.appendChild(postElement);
+            });
+        }
+
+        function editProfile() {
+            document.getElementById('edit-name').value = currentUser.name;
+            document.getElementById('edit-bio').value = currentUser.bio;
+            document.getElementById('edit-profile-modal').classList.add('active');
+        }
+
+        function markAllAsRead() {
+            const userNotifications = notifications.filter(n => n.userId === currentUser.id);
+            userNotifications.forEach(n => n.read = true);
+            updateNotificationBadge();
+            loadNotifications();
+            showToast('Të gjitha njoftimet u shënuan si të lexuara ✅', 'success');
+        }
+
+        function saveProfile() {
+            const newName = document.getElementById('edit-name').value.trim();
+            const newBio = document.getElementById('edit-bio').value.trim();
+
+            if (!newName) {
+                showToast('Emri nuk mund të jetë bosh!', 'error');
+                return;
+            }
+
+            currentUser.name = newName;
+            currentUser.bio = newBio;
+
+            closeModal('edit-profile-modal');
+            loadProfile();
+            updateSidebarUserInfo();
+            updateNavAvatar();
+            showToast('Profili u përditësua! ✅', 'success');
+        }
+
+        async function toggleFollow(userId) {
+            const targetUser = users.find(u => u.id === userId);
+            if (!targetUser) return;
+
+            const isFollowing = currentUser.following.includes(userId);
+
+            if (isFollowing) {
+                currentUser.following = currentUser.following.filter(id => id !== userId);
+                targetUser.followers = targetUser.followers.filter(id => id !== currentUser.id);
+                
+                await notificationClient.sendFollowNotification({
+                    followerName: currentUser.name,
+                    followerId: currentUser.id,
+                    followedName: targetUser.name,
+                    followedId: targetUser.id,
+                    action: 'unfollow'
+                });
+                
+                showToast(`Nuk ndiqni më ${targetUser.name}`, 'info');
+            } else {
+                currentUser.following.push(userId);
+                targetUser.followers.push(currentUser.id);
+                
+                await notificationClient.sendFollowNotification({
+                    followerName: currentUser.name,
+                    followerId: currentUser.id,
+                    followedName: targetUser.name,
+                    followedId: targetUser.id,
+                    action: 'follow'
+                });
+                
+                addNotification(userId, `${currentUser.name} filloi t'ju ndjekë`, 'follow');
+                showToast(`Tani ndiqni ${targetUser.name}! ✅`, 'success');
+            }
+
+            loadSuggestions();
+            updateSidebarUserInfo();
+            if (currentProfileUser && currentProfileUser.id === userId) {
+                loadProfile();
+            }
+        }
+
+        function loadSuggestions() {
+            const suggestions = users.filter(u => 
+                u.id !== currentUser.id && 
+                !currentUser.following.includes(u.id)
+            ).slice(0, 3);
+
+            const container = document.getElementById('suggestions-container');
+            container.innerHTML = '';
+
+            if (suggestions.length === 0) {
+                container.innerHTML = '<div class="text-center text-muted">Nuk ka sugjerime të reja</div>';
+                return;
+            }
+
+            suggestions.forEach(user => {
+                const suggestionElement = document.createElement('div');
+                suggestionElement.className = 'user-card';
+                suggestionElement.innerHTML = `
+                    ${renderAvatar(user, 'small')}
+                    <div class="user-info">
+                        <div class="user-name">${user.name}</div>
+                        <div class="user-bio">${user.bio.substring(0, 30)}...</div>
+                    </div>
+                    <button class="follow-btn" onclick="toggleFollow(${user.id})">
+                        Ndiq
+                    </button>
+                `;
+                container.appendChild(suggestionElement);
+            });
+        }
+
+        function searchUsers(query) {
+            const resultsDiv = document.getElementById('search-results');
+            
+            if (!query.trim()) {
+                resultsDiv.style.display = 'none';
+                return;
+            }
+
+            const results = users.filter(u => 
+                u.name.toLowerCase().includes(query.toLowerCase()) ||
+                u.bio.toLowerCase().includes(query.toLowerCase())
+            ).slice(0, 5);
+
+            resultsDiv.innerHTML = '';
+
+            if (results.length === 0) {
+                resultsDiv.innerHTML = '<div class="search-result">Nuk u gjetën rezultate</div>';
+            } else {
+                results.forEach(user => {
+                    const resultElement = document.createElement('div');
+                    resultElement.className = 'search-result';
+                    resultElement.onclick = () => {
+                        showUserProfile(user.id);
+                        resultsDiv.style.display = 'none';
+                    };
+                    resultElement.innerHTML = `
+                        ${renderAvatar(user, 'small')}
+                        <div>
+                            <div class="font-bold">${user.name}</div>
+                            <div class="text-sm text-muted">${user.bio.substring(0, 50)}...</div>
+                        </div>
+                    `;
+                    resultsDiv.appendChild(resultElement);
+                });
+            }
+
+            resultsDiv.style.display = 'block';
+        }
+
+        function loadMessages() {
+            const contactsContainer = document.getElementById('contacts-container');
+            const following = currentUser.following;
+
+            contactsContainer.innerHTML = '';
+
+            if (following.length === 0) {
+                contactsContainer.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">👥</div>
+                        <div class="empty-state-text">Ndiqni dikë për të filluar biseda</div>
+                    </div>
+                `;
+                return;
+            }
+
+            following.forEach(userId => {
+                const user = users.find(u => u.id === userId);
+                const contactElement = document.createElement('div');
+                contactElement.className = 'user-card';
+                contactElement.onclick = () => openChat(userId);
+                contactElement.innerHTML = `
+                    ${renderAvatar(user, 'small')}
+                    <div class="user-info">
+                        <div class="user-name">${user.name}</div>
+                        <div class="text-sm text-muted">Aktiv tani</div>
+                    </div>
+                `;
+                contactsContainer.appendChild(contactElement);
+            });
+        }
+
+        function startMessage(userId) {
+            showPage('messages');
+            setTimeout(() => openChat(userId), 100);
+        }
+
+        function openChat(userId) {
+            currentChatUser = userId;
+            const user = users.find(u => u.id === userId);
+            if (!user) return;
+
+            const chatKey = [currentUser.id, userId].sort().join('-');
+            if (!messages[chatKey]) {
+                messages[chatKey] = [];
+            }
+
+            const chatContent = document.getElementById('chat-content');
+            chatContent.innerHTML = `
+                <div style="padding: 16px; border-bottom: 1px solid var(--border-light); display: flex; align-items: center; gap: 12px;">
+                    ${renderAvatar(user, 'small')}
+                    <div>
+                        <div class="font-bold">${user.name}</div>
+                        <div class="text-sm text-muted">Aktiv tani</div>
+                    </div>
+                </div>
+                <div style="flex: 1; padding: 16px; overflow-y: auto;" id="messages-container">
+                    ${messages[chatKey].map(msg => `
+                        <div style="margin-bottom: 12px; display: flex; ${msg.senderId === currentUser.id ? 'justify-content: flex-end;' : ''}">
+                            <div style="background: ${msg.senderId === currentUser.id ? 'var(--primary-color)' : 'var(--bg-secondary)'}; color: ${msg.senderId === currentUser.id ? 'white' : 'var(--text-primary)'}; padding: 8px 12px; border-radius: 18px; max-width: 70%;">
+                                ${msg.content}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                <div style="padding: 16px; border-top: 1px solid var(--border-light); display: flex; gap: 12px;">
+                    <input type="text" placeholder="Shkruani mesazhin..." id="message-input" style="flex: 1; padding: 8px 16px; border: 1px solid var(--border-light); border-radius: 20px; outline: none;" onkeypress="handleMessageKeypress(event, ${userId})">
+                    <button class="btn" onclick="sendMessage(${userId})">Dërgo</button>
+                </div>
+            `;
+
+            const messagesContainer = document.getElementById('messages-container');
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function handleMessageKeypress(event, userId) {
+            if (event.key === 'Enter') {
+                sendMessage(userId);
+            }
+        }
+
+        async function sendMessage(userId) {
+            const input = document.getElementById('message-input');
+            const content = input.value.trim();
+
+            if (!content) return;
+
+            const chatKey = [currentUser.id, userId].sort().join('-');
+            const newMessage = {
+                senderId: currentUser.id,
+                content,
+                timestamp: new Date(),
+                id: Date.now()
+            };
+
+            messages[chatKey].push(newMessage);
+
+            const recipient = users.find(u => u.id === userId);
+            if (recipient) {
+                await notificationClient.sendMessageNotification({
+                    senderName: currentUser.name,
+                    senderId: currentUser.id,
+                    recipientName: recipient.name,
+                    recipientId: recipient.id,
+                    content: content,
+                    id: newMessage.id,
+                    type: 'text',
+                    conversationId: chatKey
+                });
+            }
+
+            addNotification(userId, `${currentUser.name} ju dërgoi një mesazh`, 'message');
+
+            input.value = '';
+            openChat(userId);
+        }
+
+        function addNotification(userId, message, type = 'general') {
+            notifications.push({
+                id: notifications.length + 1,
+                userId,
+                message,
+                type,
+                timestamp: new Date(),
+                read: false
+            });
+
+            updateNotificationBadge();
+        }
+
+        function updateNotificationBadge() {
+            const userNotifications = notifications.filter(n => n.userId === currentUser.id && !n.read);
+            const badge = document.getElementById('notifications-badge');
+            
+            if (userNotifications.length > 0) {
+                badge.textContent = userNotifications.length;
+                badge.style.display = 'flex';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        function loadNotifications() {
+            const userNotifications = notifications.filter(n => n.userId === currentUser.id);
+            const container = document.getElementById('notifications-container');
+
+            container.innerHTML = '';
+
+            if (userNotifications.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state" style="padding: 40px 20px;">
+                        <div class="empty-state-icon">🔔</div>
+                        <div class="empty-state-text">Nuk keni njoftime të reja</div>
+                    </div>
+                `;
+                return;
+            }
+
+            userNotifications.forEach(n => n.read = true);
+            updateNotificationBadge();
+
+            userNotifications.reverse().forEach(notification => {
+                const notificationElement = document.createElement('div');
+                notificationElement.className = `notification-item ${!notification.read ? 'unread' : ''}`;
+                
+                const icons = {
+                    like: '❤️',
+                    comment: '💬',
+                    follow: '👥',
+                    share: '🔄',
+                    message: '📩'
+                };
+
+                const iconClass = notification.type || 'general';
+
+                notificationElement.innerHTML = `
+                    <div class="notification-icon ${iconClass}">
+                        ${icons[notification.type] || '🔔'}
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-text">${notification.message}</div>
+                        <div class="notification-time">
+                            ${!notification.read ? '<div class="notification-dot"></div>' : ''}
+                            <span>${formatTime(notification.timestamp)}</span>
+                        </div>
+                    </div>
+                `;
+
+                notificationElement.onclick = () => {
+                    if (notification.type === 'like' || notification.type === 'comment' || notification.type === 'share') {
+                        showPage('feed');
+                    } else if (notification.type === 'follow') {
+                        const followerName = notification.message.split(' ')[0] + ' ' + notification.message.split(' ')[1];
+                        const follower = users.find(u => notification.message.includes(u.name));
+                        if (follower) {
+                            showUserProfile(follower.id);
+                        }
+                    } else if (notification.type === 'message') {
+                        showPage('messages');
+                    }
+                };
+                
+                container.appendChild(notificationElement);
+            });
+        }
+
+        function showFollowers() {
+            const modal = document.getElementById('followers-modal');
+            const list = document.getElementById('followers-list');
+            const user = currentProfileUser || currentUser;
+
+            list.innerHTML = '';
+
+            if (user.followers.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">👥</div>
+                        <div class="empty-state-text">${user.id === currentUser.id ? 'Nuk keni ndjekës ende' : `${user.name} nuk ka ndjekës ende`}</div>
+                    </div>
+                `;
+            } else {
+                user.followers.forEach(userId => {
+                    const followerUser = users.find(u => u.id === userId);
+                    const followerElement = document.createElement('div');
+                    followerElement.className = 'user-card';
+                    followerElement.innerHTML = `
+                        ${renderAvatar(followerUser, 'small')}
+                        <div class="user-info">
+                            <div class="user-name">${followerUser.name}</div>
+                            <div class="user-bio">${followerUser.bio.substring(0, 40)}...</div>
+                        </div>
+                        <button class="btn btn-outline" onclick="showUserProfile(${userId}); closeModal('followers-modal');">
+                            Shiko
+                        </button>
+                    `;
+                    list.appendChild(followerElement);
+                });
+            }
+
+            modal.classList.add('active');
+        }
+
+        function showFollowing() {
+            const modal = document.getElementById('following-modal');
+            const list = document.getElementById('following-list');
+            const user = currentProfileUser || currentUser;
+
+            list.innerHTML = '';
+
+            if (user.following.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">👤</div>
+                        <div class="empty-state-text">${user.id === currentUser.id ? 'Nuk ndiqni askënd ende' : `${user.name} nuk ndjek askënd ende`}</div>
+                    </div>
+                `;
+            } else {
+                user.following.forEach(userId => {
+                    const followingUser = users.find(u => u.id === userId);
+                    const followingElement = document.createElement('div');
+                    followingElement.className = 'user-card';
+                    followingElement.innerHTML = `
+                        ${renderAvatar(followingUser, 'small')}
+                        <div class="user-info">
+                            <div class="user-name">${followingUser.name}</div>
+                            <div class="user-bio">${followingUser.bio.substring(0, 40)}...</div>
+                        </div>
+                        <button class="btn btn-outline" onclick="showUserProfile(${userId}); closeModal('following-modal');">
+                            Shiko
+                        </button>
+                    `;
+                    list.appendChild(followingElement);
+                });
+            }
+
+            modal.classList.add('active');
+        }
+
+        function handleProfilePictureUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (file.size > 5 * 1024 * 1024) {
+                showToast('Madhësia e fotos nuk duhet të kalojë 5MB!', 'error');
+                return;
+            }
+
+            if (!file.type.startsWith('image/')) {
+                showToast('Ju lutem zgjidhni një file imazhi!', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                currentUser.avatar = e.target.result;
+                loadProfile();
+                updateSidebarUserInfo();
+                updateNavAvatar();
+                showToast('Foto e profilit u ndryshua! 📸', 'success');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function showCreatePost() {
+            const postContent = document.getElementById('post-content');
+            postContent.focus();
+            postContent.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            showToast(
+                newTheme === 'dark' ? 'Kaluat në modalitetin e errët! 🌙' : 'Kaluat në modalitetin e ndritshëm! ☀️', 
+                'info'
+            );
+        }
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', theme);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initApp();
+
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('modal')) {
+                    e.target.classList.remove('active');
+                }
+            });
+
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+                if (!localStorage.getItem('theme')) {
+                    document.documentElement.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
